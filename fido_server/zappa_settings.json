@@ -1,0 +1,18 @@
+{
+    "dev": {
+        "aws_region": "us-west-1",
+        "django_settings": "fido_server.settings",
+        "profile_name": "default",
+        "project_name": "fido-server",
+        "runtime": "python3.8",
+        "s3_bucket": "fidotest-bucket",
+        "timeout_seconds": 900,
+        "manage_roles": false,
+        "role_name": "ZappaRole",
+        "role_arn": "arn:aws:iam::682358963650:role/ZappaRole",
+        "vpc_config" : {
+            "SubnetIds": ["subnet-0810f99b3f90ba040", "subnet-09a48101298461527"],
+            "SecurityGroupIds": [ "sg-0acbb979e42fdcec9" ]
+        }
+    }
+}
