@@ -1,38 +1,46 @@
 #!/usr/bin/env python
 import os
-from urllib.request import urlopen
-from urllib.parse import urlencode
-import json
 from api_methods.exceptions.errors import ProcessNotFinished
 from api_methods.models import Client
 import sms
 import random
+import requests
+from sms.backends.base import BaseSmsBackend
 
 
-# def send_sms(phone,message):
-#     api_key = os.getenv('API_KEY')
-#     print("api_key", api_key)
-#     sender_id = os.getenv('SENDER_ID')
-#     #parameters to send SMS
-#     params = {
-#         "api_key": api_key,
-#     }
-#     # params = {\"apikey\":api_key,\"destination\":phone,\"message\":message,\"source\":sender_id,\"dlr\":0,\"type\":0,\"time\":date_time}
+api_key = os.getenv("API_KEY")
+sender_id = os.getenv("SENDER_ID")
 
-#     #prepare your url
-#     url = 'https://sms.textcus.com/api/send?'+ urlencode(params)
 
-#     content = urlopen(url).read()
-#     print(json.loads(content))
-#     #content contains the response from TextCus
-#     return json.loads(content)
+class CustomSmsBackend(BaseSmsBackend):
+    def __init__(self, fail_silently: bool = False,*args, **kwargs) -> None:
+        self.fail_silently = fail_silently
+        super().__init__(*args, **kwargs)
+        
+    def send_messages(self, messages) -> int:
+        # parameters to send SMS
+        destination = messages[0].recipients
+        final_destination = ["+233" + str(i[1:]) for i in destination]
+        
+        params = {
+            "apikey": api_key,
+            "destination": final_destination,
+            "message": messages[0].body,
+            "source": sender_id,
+            "dlr": 1,
+            "type": 0,
+        }
 
-# # #Defining variables to be used inside function
-# # api_key = '9OqfypgGXyAUx7422qylPLGrJxz17Nsmq' #Remember to put your account API Key here
-# # phone = '23324XXXXXXX' #International format (233) excluding the (+)
-# # message = 'This is just a test on TextCus!'
-# # sender_id = 'TextCus' #11 Characters maximum
-# # date_time = "2017-05-02 00:59:00"
+        # prepare your url
+        response = requests.get('https://sms.textcus.com/api/send?', params=params)
+        content =  response.json()["status"]
+        # content contains the response from TextCus
+        try:
+            if content != "0000":
+                raise ProcessNotFinished
+        except Exception:
+            raise ProcessNotFinished
+        return content
 
 
 def send_otp_sms(phone):
@@ -44,14 +52,14 @@ def send_otp_sms(phone):
     four_digits = "".join(map(str, digits))
 
     message = "Your OTP for the serivce is: " + four_digits
-    
+
     try:
         client = Client.objects.get(phone_number=phone)
         client.otp = four_digits
         client.save()
     except Client.DoesNotExist:
         Client.objects.create(phone_number=phone, otp=four_digits)
-        
+
     with sms.get_connection() as connection:
         sms.Message(
             message,

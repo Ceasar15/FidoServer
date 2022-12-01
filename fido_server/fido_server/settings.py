@@ -130,4 +130,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-SMS_BACKEND = 'sms.backends.console.SmsBackend'
+# SMS_BACKEND = 'sms.backends.console.SmsBackend'
+SMS_BACKEND = "api_methods.utils.send_sms.CustomSmsBackend"
