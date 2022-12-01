@@ -1,8 +1,8 @@
 from django.urls import path
 
-from .views import send_fullname
+from api_methods.views import get_otp
 
 
 urlpatterns = [
-    path('api/v1', send_fullname )
+    path('menu/get_otp', get_otp, name="get_otp")
 ]
