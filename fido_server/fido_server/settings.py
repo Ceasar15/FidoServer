@@ -23,12 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+# SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = "django-insecure-5ug3&!)_7n9_k_@!r-xpqru(!h_a(3vqx0n=ed_4n_&)t#(xw7"
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [ '*']
 
 # Application definition
 
@@ -40,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'api_methods'
+    'api_methods',
+    "zappa_django_utils"
 ]
 
 MIDDLEWARE = [
@@ -78,12 +80,18 @@ WSGI_APPLICATION = 'fido_server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'fidotestdb',
+        'USER': 'fidouser',
+        'PASSWORD': 'Edemkwadwo.1',
+        'HOST': 'fidotestdb.cy4ygfqvh3cc.us-west-1.rds.amazonaws.com',
+        'PORT': 5432,
     }
 }
+
 
 
 # Password validation
@@ -132,3 +140,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # SMS_BACKEND = 'sms.backends.console.SmsBackend'
 SMS_BACKEND = "api_methods.utils.send_sms.CustomSmsBackend"
+
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
