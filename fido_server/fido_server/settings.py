@@ -23,8 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.getenv('SECRET_KEY')
-SECRET_KEY = "django-insecure-5ug3&!)_7n9_k_@!r-xpqru(!h_a(3vqx0n=ed_4n_&)t#(xw7"
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -84,10 +83,10 @@ WSGI_APPLICATION = 'fido_server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'fidotestdb',
-        'USER': 'fidouser',
-        'PASSWORD': 'Edemkwadwo.1',
-        'HOST': 'fidotestdb.cy4ygfqvh3cc.us-west-1.rds.amazonaws.com',
+        'NAME': os.getenv("DB_NAME"),
+        'USER': os.getenv("DB_USER"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("DB_HOST"),
         'PORT': 5432,
     }
 }

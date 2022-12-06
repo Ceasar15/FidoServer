@@ -47,7 +47,7 @@ def check_balance(request):
         return Response(
             {
                 "status": status.HTTP_200_OK,
-                "message": "Your available balace is: %s"
+                "message": "Your available balance is: %s"
                 % balance,
             },
             status=status.HTTP_200_OK,
