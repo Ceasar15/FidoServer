@@ -8,10 +8,8 @@ import requests
 from sms.backends.base import BaseSmsBackend
 
 
-# api_key = os.getenv("API_KEY")
-# sender_id = os.getenv("SENDER_ID")
-api_key = API_KEY="brmr2O8f8vQqibMs0iN1aLrYrX9uAlVF"
-sender_id =SENDER_ID="FidoTest"
+api_key = os.getenv("API_KEY")
+sender_id = os.getenv("SENDER_ID")
 
 class CustomSmsBackend(BaseSmsBackend):
     def __init__(self, fail_silently: bool = False,*args, **kwargs) -> None:
@@ -32,15 +30,14 @@ class CustomSmsBackend(BaseSmsBackend):
             "type": 0,
         }
 
-        # prepare your url
         response = requests.get('https://sms.textcus.com/api/send?', params=params)
-        # content =  response.json()["status"]
-        # # content contains the response from TextCus
-        # try:
-        #     if content != "0000":
-        #         raise ProcessNotFinished
-        # except Exception:
-        #     raise ProcessNotFinished
+        content =  response.json()["status"]
+
+        try:
+            if content != "0000":
+                raise ProcessNotFinished
+        except Exception:
+            raise ProcessNotFinished
         return response.text
 
 
